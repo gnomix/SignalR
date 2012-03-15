@@ -2,23 +2,16 @@
 using System.Collections.Specialized;
 using System;
 using System.Net.Http.Headers;
+using SignalR.Hosting;
 
 namespace SignalR.AspNetWebApi
 {
     internal static class HttpRequestHeadersExtensions
     {
-        public static NameValueCollection ParseCookies(this HttpRequestHeaders headers)
+        public static IRequestCookieCollection ParseCookies(this HttpRequestHeaders headers)
         {
-            var cookies = new NameValueCollection();
-
-            IEnumerable<string> cookieValues;
-            if (headers.TryGetValues("Cookie", out cookieValues))
-            {
-                // TODO: Parse cookies from cookie header
-
-            }
-
-            return cookies;
+            // TODO: Add support for cookies when Web API does
+            return new CookieCollection();
         }
 
         public static NameValueCollection ParseHeaders(this HttpRequestHeaders headers)

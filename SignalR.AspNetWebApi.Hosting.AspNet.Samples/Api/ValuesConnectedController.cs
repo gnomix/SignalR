@@ -55,7 +55,7 @@ namespace SignalR.AspNetWebApi.Hosting.AspNet.Samples.Api.Controllers
             Clients.called(HubContext.ConnectionId, "patch", Interlocked.Increment(ref _patchCalls));
         }
 
-        Task IConnected.Connect(IEnumerable<string> groups)
+        Task IConnected.Connect()
         {
             Caller.setCallStats(new { get = _getCalls, post = _postCalls, put = _putCalls, del = _deleteCalls, patch = _patchCalls });
             return Task.Factory.Done();

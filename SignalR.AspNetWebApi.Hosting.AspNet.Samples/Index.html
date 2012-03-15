@@ -88,7 +88,10 @@
                     url = "api/values" + ($el.attr("data-qs") || "");
 
                     // Call the Web API using jQuery
-                    $.ajax(url, { type: verb });
+                    $.ajax(url, { type: verb })
+                        .done(function (result) {
+                            // 'result' is the return value from the action method
+                        });
                 });
 
             });

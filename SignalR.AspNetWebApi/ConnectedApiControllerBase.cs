@@ -24,19 +24,22 @@ namespace SignalR.AspNetWebApi
 
         protected override void Initialize(HttpControllerContext controllerContext)
         {
+            var hub = ((IHub)this);
+            
             var user = controllerContext.Request.GetUserPrincipal();
-            // TODO: Review why the IResponse parameter is null
+            // Response parameter is null here because outgoing broadcast messages will always go
+            // via the SignalR intrinsics, and method return values via the Web API intrinsics.
             var hostContext = new HostContext(new WebApiRequest(controllerContext.Request), null, user);
             var connectionId = hostContext.Request.QueryString["connectionId"];
-            ((IHub)this).Context = new HubContext(hostContext, connectionId);
+            hub.Context = new HubContext(hostContext, connectionId);
             var hubName = this.GetType().FullName;
             var connection = _dependencyResolver.Resolve<IConnectionManager>().GetConnection<HubDispatcher>();
             var state = new TrackingDictionary();
             var agent = new ClientAgent(connection, hubName);
-            ((IHub)this).Caller = new SignalAgent(connection, connectionId, hubName, state);
-            ((IHub)this).Agent = agent;
-            ((IHub)this).GroupManager = agent;
-
+            hub.Caller = new SignalAgent(connection, connectionId, hubName, state);
+            hub.Agent = agent;
+            hub.GroupManager = agent;
+            
             base.Initialize(controllerContext);
         }
 

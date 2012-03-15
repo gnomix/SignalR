@@ -8,7 +8,7 @@ namespace SignalR.AspNetWebApi
     internal class WebApiRequest : IRequest
     {
         private readonly HttpRequestMessage _httpRequestMessage;
-        private readonly Lazy<NameValueCollection> _cookies;
+        private readonly Lazy<IRequestCookieCollection> _cookies;
         private readonly Lazy<NameValueCollection> _form;
         private readonly Lazy<NameValueCollection> _headers;
         private readonly Lazy<NameValueCollection> _queryString;
@@ -17,7 +17,7 @@ namespace SignalR.AspNetWebApi
         {
             _httpRequestMessage = httpRequestMessage;
 
-            _cookies = new Lazy<NameValueCollection>(() => _httpRequestMessage.Headers.ParseCookies());
+            _cookies = new Lazy<IRequestCookieCollection>(() => _httpRequestMessage.Headers.ParseCookies());
 
             _form = new Lazy<NameValueCollection>(() => _httpRequestMessage.Content.ReadAsNameValueCollection());
 
@@ -26,7 +26,7 @@ namespace SignalR.AspNetWebApi
             _queryString = new Lazy<NameValueCollection>(() => Url.ParseQueryString());
         }
 
-        public NameValueCollection Cookies
+        public IRequestCookieCollection Cookies
         {
             get
             {

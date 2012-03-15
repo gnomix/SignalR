@@ -5,17 +5,17 @@ namespace SignalR.Hubs
 {
     public class SignalAgent : DynamicObject, IClientAgent
     {
-        private readonly IConnection _connection;
+        private readonly IBroadcastingConnection _connection;
         private readonly string _signal;
         private readonly string _hubName;
         private readonly TrackingDictionary _state;
 
-        public SignalAgent(IConnection connection, string signal, string hubName)
+        public SignalAgent(IBroadcastingConnection connection, string signal, string hubName)
             : this(connection, signal, hubName, null)
         {
         }
 
-        public SignalAgent(IConnection connection, string signal, string hubName, TrackingDictionary state)
+        public SignalAgent(IBroadcastingConnection connection, string signal, string hubName, TrackingDictionary state)
         {
             _connection = connection;
             _signal = signal;

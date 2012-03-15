@@ -85,11 +85,11 @@ namespace SignalR.Transports
 
         public Func<Exception, Task> Error { get; set; }
 
-        public Task ProcessRequest(IReceivingConnection connection)
+        public Task ProcessRequest(IConnection connection)
         {
             Connection = connection;
 
-            if (Context.Request.Url.LocalPath.EndsWith("/send"))
+            if (IsSendRequest)
             {
                 return ProcessSendRequest();
             }
@@ -126,8 +126,15 @@ namespace SignalR.Transports
 
         public virtual Task Send(object value)
         {
+            if (!IsSendRequest)
+            {
+                // Delegate to the connection if it's not a send request
+                return Connection.Send(value);
+            }
+
             var data = _jsonSerializer.Stringify(value);
             OnSending(data);
+
             return Context.Response.EndAsync(data);
         }
 
@@ -136,7 +143,15 @@ namespace SignalR.Transports
             get { return true; }
         }
 
-        protected virtual Task InitializeResponse(IReceivingConnection connection)
+        private bool IsSendRequest
+        {
+            get
+            {
+                return Context.Request.Url.LocalPath.EndsWith("/send");
+            }
+        }
+
+        protected virtual Task InitializeResponse(IConnection connection)
         {
             return TaskAsyncHelper.Empty;
         }
@@ -158,7 +173,7 @@ namespace SignalR.Transports
             return TaskAsyncHelper.Empty;
         }
 
-        private Task ProcessReceiveRequest(IReceivingConnection connection, Action postReceive = null)
+        private Task ProcessReceiveRequest(IConnection connection, Action postReceive = null)
         {
             HeartBeat.AddConnection(this);
             HeartBeat.MarkConnection(this);
@@ -167,14 +182,14 @@ namespace SignalR.Transports
                     .Then((c, pr) => ProcessMessages(c, pr), connection, postReceive);
         }
 
-        private Task ProcessMessages(IReceivingConnection connection, Action postReceive = null)
+        private Task ProcessMessages(IConnection connection, Action postReceive = null)
         {
             var tcs = new TaskCompletionSource<object>();
             ProcessMessagesImpl(tcs, connection, postReceive);
             return tcs.Task;
         }
 
-        private void ProcessMessagesImpl(TaskCompletionSource<object> taskCompletetionSource, IReceivingConnection connection, Action postReceive = null)
+        private void ProcessMessagesImpl(TaskCompletionSource<object> taskCompletetionSource, IConnection connection, Action postReceive = null)
         {
             if (!IsTimedOut && !IsDisconnected && Context.Response.IsClientConnected)
             {

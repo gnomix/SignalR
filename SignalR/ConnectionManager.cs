@@ -15,12 +15,12 @@ namespace SignalR
             _resolver = resolver;
         }
 
-        public IConnection GetConnection<T>() where T : PersistentConnection
+        public IBroadcastingConnection GetConnection<T>() where T : PersistentConnection
         {
             return GetConnection(typeof(T));
         }
 
-        public IConnection GetConnection(Type type)
+        public IBroadcastingConnection GetConnection(Type type)
         {
             return GetConnection(type.FullName);
         }
@@ -36,7 +36,7 @@ namespace SignalR
             return new ClientAgent(connection, hubName);
         }
 
-        private IConnection GetConnection(string connectionType)
+        private IBroadcastingConnection GetConnection(string connectionType)
         {
             // Give this a unique id
             var connectionId = Guid.NewGuid().ToString();

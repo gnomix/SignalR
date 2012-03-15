@@ -14,7 +14,7 @@ namespace SignalR.Transports
         string ConnectionId { get; }
         IEnumerable<string> Groups { get; }
 
-        Task ProcessRequest(IReceivingConnection connection);
+        Task ProcessRequest(IConnection connection);
         Task Send(object value);
     }
 }

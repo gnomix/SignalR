@@ -1,12 +1,14 @@
-﻿using System;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 namespace SignalR
 {
-    public interface IConnection : IReceivingConnection
+    public interface IConnection
     {
+        Task<PersistentResponse> ReceiveAsync(CancellationToken timeoutToken);
+        Task<PersistentResponse> ReceiveAsync(string messageId, CancellationToken timeoutToken);
+
+        Task SendCommand(SignalCommand command);
         Task Send(object value);
-        Task Broadcast(string message, object value);
-        Task Broadcast(object value);
     }
 }

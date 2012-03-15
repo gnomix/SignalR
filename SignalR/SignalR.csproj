@@ -100,7 +100,7 @@
     <Compile Include="Infrastructure\IDependencyResolver.cs" />
     <Compile Include="Infrastructure\IJavaScriptMinifier.cs" />
     <Compile Include="Infrastructure\SafeSet.cs" />
-    <Compile Include="IReceivingConnection.cs" />
+    <Compile Include="IConnection.cs" />
     <Compile Include="JsonConvertAdapter.cs" />
     <Compile Include="Json.cs" />
     <Compile Include="SignalCommand.cs" />
@@ -121,7 +121,7 @@
     <Compile Include="Hubs\TrackingDictionary.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Hubs\IActionResolver.cs" />
-    <Compile Include="IConnection.cs" />
+    <Compile Include="IBroadcastingConnection.cs" />
     <Compile Include="Hubs\IJavaScriptProxyGenerator.cs" />
     <Compile Include="MessageBus\Message.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

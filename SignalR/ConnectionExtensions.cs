@@ -5,7 +5,7 @@ namespace SignalR
 {
     public static class ConnectionExtensions
     {
-        public static Task Close(this IReceivingConnection connection)
+        public static Task Close(this IConnection connection)
         {
             var command = new SignalCommand
             {

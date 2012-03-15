@@ -5,10 +5,10 @@ namespace SignalR.Hubs
 {
     public class ClientAgent : DynamicObject, IClientAgent, IGroupManager
     {
-        private readonly IConnection _connection;
+        private readonly IBroadcastingConnection _connection;
         private readonly string _hubName;
 
-        public ClientAgent(IConnection connection, string hubName)
+        public ClientAgent(IBroadcastingConnection connection, string hubName)
         {
             _connection = connection;
             _hubName = hubName;
@@ -22,7 +22,7 @@ namespace SignalR.Hubs
             }
         }
 
-        public IConnection Connection
+        public IBroadcastingConnection Connection
         {
             get
             {
@@ -47,7 +47,7 @@ namespace SignalR.Hubs
             return true;
         }
 
-        public static Task Invoke(IConnection connection, string signal, string hubName, string method, object[] args)
+        public static Task Invoke(IBroadcastingConnection connection, string signal, string hubName, string method, object[] args)
         {
             signal = hubName + "." + signal;
 

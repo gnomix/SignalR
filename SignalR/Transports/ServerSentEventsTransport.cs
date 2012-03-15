@@ -29,7 +29,7 @@ namespace SignalR.Transports
             return Context.Response.WriteAsync("id: " + response.MessageId + "\n" + "data: " + data + "\n\n");
         }
 
-        protected override Task InitializeResponse(IReceivingConnection connection)
+        protected override Task InitializeResponse(IConnection connection)
         {
             return base.InitializeResponse(connection)
                        .Then(() =>

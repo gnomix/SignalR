@@ -108,7 +108,7 @@ namespace SignalR.Transports
             _timeoutTokenSource.Cancel();
         }
 
-        protected IReceivingConnection Connection { get; set; }
+        protected IConnection Connection { get; set; }
 
         protected HostContext Context
         {

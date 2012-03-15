@@ -93,7 +93,7 @@ namespace SignalR.Transports
 
         public Func<Exception, Task> Error { get; set; }
 
-        public Task ProcessRequest(IReceivingConnection connection)
+        public Task ProcessRequest(IConnection connection)
         {
             Connection = connection;
 
@@ -127,10 +127,21 @@ namespace SignalR.Transports
             HeartBeat.MarkConnection(this);
 
             AddTransportData(response);
-            return Send((object)response);
+            return SendRaw(response);
+        }
+        
+        public virtual Task Send(object value)
+        {
+            if (!IsSendRequest)
+            {
+                // Delegate to the connection if this isn't a send request
+                return Connection.Send(value);
+            }
+
+            return SendRaw(value);
         }
 
-        public virtual Task Send(object value)
+        private Task SendRaw(object value)
         {
             var payload = _jsonSerializer.Stringify(value);
             if (Sending != null)
@@ -159,7 +170,7 @@ namespace SignalR.Transports
             return TaskAsyncHelper.Empty;
         }
 
-        private Task ProcessConnectRequest(IReceivingConnection connection)
+        private Task ProcessConnectRequest(IConnection connection)
         {
             if (Connected != null)
             {
@@ -170,7 +181,7 @@ namespace SignalR.Transports
             return ProcessReceiveRequest(connection);
         }
 
-        private Task ProcessReceiveRequest(IReceivingConnection connection, Action postReceive = null)
+        private Task ProcessReceiveRequest(IConnection connection, Action postReceive = null)
         {
             HeartBeat.AddConnection(this);
             HeartBeat.MarkConnection(this);

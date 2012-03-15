@@ -41,7 +41,7 @@ namespace SignalR
         public static event Action<string> ClientConnected;
         public static event Action<string> ClientDisconnected;
 
-        public IConnection Connection
+        public IBroadcastingConnection Connection
         {
             get;
             private set;
@@ -111,7 +111,7 @@ namespace SignalR
             return _transport.ProcessRequest(Connection) ?? TaskAsyncHelper.Empty;
         }
 
-        protected virtual IConnection CreateConnection(string connectionId, IEnumerable<string> groups, IRequest request)
+        protected virtual IBroadcastingConnection CreateConnection(string connectionId, IEnumerable<string> groups, IRequest request)
         {
             return new Connection(_messageBus,
                                   _jsonSerializer,

@@ -23,10 +23,10 @@ namespace SignalR.Samples.Raw
 
             string user = GetUser(connectionId);
 
+            var initialTask = Send("Adding you to group foo!").ContinueWith(_ => AddToGroup(connectionId, "foo")).Unwrap();
 
-
-            return AddToGroup(connectionId, "foo").ContinueWith(_ => 
-                   Connection.Broadcast(DateTime.Now + ": " + user + " joined")).Unwrap();
+            return initialTask.ContinueWith(_ => 
+                    Connection.Broadcast(DateTime.Now + ": " + user + " joined")).Unwrap();
         }
 
         protected override Task OnDisconnectAsync(string connectionId)
